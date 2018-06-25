@@ -1,0 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#GameField{
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+}
+#CursorPos{
+    position: fixed;
+    width: 216px;
+    word-wrap: normal;
+}
