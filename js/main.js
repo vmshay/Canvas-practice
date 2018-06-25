@@ -45,7 +45,8 @@ let Cube = function(x,y,w,h,type,color) {
 
 //Определение начальных блоков
 let Game = function() {
-    object.push(new Cube(50,50,50,50,'fill','blue'));
+    object.push(new Cube(50,250,20,20,'fill','green'));
+    object.push(new Cube(50,0,50,150,'fill','gray'));
 };
 
 
@@ -65,6 +66,11 @@ let Draw  = function () {
             context.strokeRect(object[i].x, object[i].y, object[i].width, object[i].height);
         }
     }
+};
+
+
+document.onkeypress = function (e) {
+    object[0].dy -=2;
 };
 
 
@@ -115,39 +121,42 @@ let CheckHover = function () {
 
 let Gravity = function (){
     for (let num in object) {
-        if(!object[num].fall) return;
-        object[num].x += object[num].dx;
-        object[num].y += object[num].dy;
+        if(!object[0].fall) return;
+        object[0].x += object[0].dx;
+        object[0].y += object[0].dy;
 
-        if (object[num].dy < object[num].max) {
-            object[num].dy += object[num].dd;
+        if (object[0].dy < object[0].max) {
+            //object[0].dy += object[0].dd;
         }
-        if (object[num].y + object[num].height >= height) {
-            object[num].y = height - object[num].height;
-            object[num].dy *= -1;
-            object[num].dy /=2;
+        if (object[0].y + object[0].height >= height) {
+            object[0].y = height - object[0].height;
+            object[0].dy *= -0.1;
+            object[0].dy /=2;
         }
-        if (Math.abs(object[num].dy) < object[num].dd * 2 && object[num].y + object[num].height >= height){
-            object[num].dy = 0;
+        if (Math.abs(object[0].dy) < object[0].dd * 2 && object[0].y + object[0].height >= height){
+            object[0].dy = 0;
         }
     }
 };
 
-let AddWall = function(){
-  if (object.length === 0){
-      object.push(new Cube(50,50,50,50,'fill','blue'));
+let Lose = function () {
+    for (let i in object)
+  if (object[0].y <= object[i].y + object[i].height) console.log('Loose');
+};
 
-  }
+let AddWall = function(){
+      object.push(new Cube(50,0,50,150,'fill','red'));
+
 };
 
 
 
 //Создание новых эл-ов
-canvas.onclick = function () {
+/*canvas.onclick = function () {
     let x = MousePoint.X-25;
     let y = MousePoint.Y-25;
     object.push(new Cube(x,y,50,50,'fill','blue'));
-};
+};*/
 
 
 Game();
@@ -156,6 +165,7 @@ setInterval(function Redraw(){
     Debug();
     Draw();
     Gravity();
+    Lose();
 }, 1000/60);
 
 
