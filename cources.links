@@ -1,2 +1,72 @@
 https://fontawesome.com/v4/icons/
 https://codepen.io/anandaprojapati/pen/GmrwYE
+
+
+####Auth
+<?php
+//Получаем данные с формы
+$login=$_POST['login'];
+$pass=$_POST['pass'];
+
+//Хешируем полученынй пароль
+$hash = md5($pass);
+
+//Создаем экземпляр подключения
+$mysql = mysqli_connect('localhost','root','root','masters');
+	if ($mysql==False) {
+		echo "Нет соединения";
+		echo mysqli_connect_error();
+		exit();
+	}
+//получаем данные из таблицы
+$res=$mysql->query("SELECT * FROM `registration` WHERE `login` = '$login' and `pass` = '$hash'");
+
+//Проверяем есть ли данные
+$user=$res->fetch_assoc();
+if (count($user) == 0) {
+		echo "Пользователь не найден";
+		exit();
+}
+$mysql->close();
+header('Location: ./../auth1.html')
+
+?>
+##############Reg
+<?php
+
+
+//Получаем данные с формы
+$login=$_POST['login'];
+$pass=$_POST['pass'];
+$name=$_POST['name'];
+
+//Хешируем пароль
+$hash = md5($pass);
+
+//проверяем длину логина
+if(mb_strlen($login) < 5 || mb_strlen($login > 20)) {
+	echo "Неопустимая длина логина";
+	exit();
+}
+//проверяем длину пароля
+if(mb_strlen($pass) < 6 || mb_strlen($pass > 50)) {
+	echo "Неопустимая длина пароля";
+	exit();
+}
+
+//Создаем экземпляр подключения
+$mysql = mysqli_connect('localhost','root','root','masters');
+	if ($mysql==False) {
+		echo "Нет соединения";
+		echo mysqli_connect_error();
+		exit();
+	}
+
+//Отправляем данные в базу
+$result = $mysql->query("INSERT INTO `registration` (`login`,`name`,`pass`) VALUES ('$login','$name','$hash')");
+$mysql->close();
+
+//Редиректим на главную
+header('Location: ../reg.html')
+?>
+#PHP
